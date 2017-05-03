@@ -1,34 +1,37 @@
-##wiki-embedded
+wiki-embedded
+=======
 
 
-wiki-embedded is a simple wiki that lives inside `<div>` on your webpage. No more 1990's wiki look - it is made to seamlessly integrates to to your personal or company website. Great for an help/support pages or for a knowledgebase.
+wiki-embedded is a simple wiki that lives inside `<div>` on your webpage. No more 1990's wiki look - it is made to seamlessly integrate to to your personal or company website. Great for an help/support pages or for a knowledgebase.
 
-###Features
+Features
+-----
 
 * php/jquery based wiki
 * non-intrusive, two-lines setup
-* add/update/delete **Markdown** markup language compatible pages
+* **Markdown** markup language compatible pages
 * no database required
+* simple add/update/delete 
 * no page reload when following the wiki links
-* use the same style sheet as your webage, or define your own
+* use the same style sheet as your webage
 * user control is done by your webpage: you decide who can read and who can edit
-* pages parsing by Emanuil Rusev [Parsedown](http://parsedown.org)
+* pages parsing by Emanuil Rusev [Parsedown](https://github.com/erusev/parsedown)
 
-###Setup
+Setup
+-----
 
-* copy or clone the code to your wiki/ subdirectory
-* enable access to wikipages directory by: `chmod  777 -R wiki/pages/`
-* Inside your webpage include 
-  *  jQuery library, 
-  * `wiki/wiki.php` file and 
+* copy or clone the code from the wiki/ subdirectory
+* enable access to wikipages directory: `chmod  777 -R wiki/pages/`
+* Inside your webpage ( look at the `index.php` example ) include the following: 
+  *  jQuery library
+  * `wiki/wiki.php` file
   * `<div id="wiki" data-editable="false"></div>`
-* Control the access by `data-editable="false"` or `data-editable="true"` attribute.
+* Control users access by `data-editable="false"` / `data-editable="true"` attribute.
 
-note: It is up to your webpage to control user logins and to manipulate `data-editable` attribute. Wiki can also be public for reading and only logged in users can edit. 
+note: It is up to your webpage to control user logins and to manipulate `data-editable` attribute.
 
-
-
-####Example:
+Example:
+-----
 
 ```html
 <script src="jquery.min.js"></script>
@@ -37,13 +40,13 @@ note: It is up to your webpage to control user logins and to manipulate `data-ed
 <div id="wiki" data-editable="false"></div>
 ```
 
-In case you have some complicated directory structure and wish to embed wiki somewhere deep you need to edit `wiki.php` by changing:
+In case you have some complicated directory structure and wish to embed wiki somewhere deep you need to edit `wiki.php` by setting:
 ```html
-var wikiurl = "wiki/"; 
+var wikiurl = "wiki/";  to point to your path, e.g. var wikiurl = "../../downTheTree/evenDeeper/wiki/";
 ```
-to point to your path, e.g.
-```html
-var wikiurl = "../../downTheTree/evenDeeper/wiki/";
-```
+
+License
+-----
+wiki-embedded is licensed under [MIT](https://github.com/Fabianlindfors/multi.js/blob/master/LICENSE).
 
 
