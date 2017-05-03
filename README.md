@@ -40,7 +40,7 @@ Example:
 <div id="wiki" data-editable="false"></div>
 ```
 
-In case you have some complicated directory structure and wish to embed wiki somewhere deep you need to edit `wiki.php` by setting:
+In case you have some complicated directory structure and wish to embed wiki somewhere deep you'll need to edit `wiki.php` by setting:
 ```html
 var wikiurl = "wiki/";  to point to your path, e.g. var wikiurl = "../../downTheTree/evenDeeper/wiki/";
 ```
