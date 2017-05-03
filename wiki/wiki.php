@@ -3,7 +3,7 @@
  * wiki-embedded 
 
  * @author Aleksandar Radovanovic <aleksandar@radovanovic.com>
- * @version 2016-05-03
+ * @version 2017-05-03
 */
 ?>
 <script>
@@ -18,7 +18,7 @@ $(function() {
 /*  dont change bellow this point
 ===============================================================================
 */
-	$( "#wiki" ).load(wikiurl+"page.php?&p=" + pagename);
+	$( "#wiki" ).load(wikiurl+"page.php?a=s&p=" + pagename);
 	
 	// make pages editable id data-editable is set to true
 	if ($("#wiki").data("editable")===true) {
@@ -34,7 +34,7 @@ $(function() {
 			window.location.href = pagename;
 		} else {
 			pagename += ".md";
-			$( "#wiki" ).load(wikiurl+"page.php?p=" + pagename);
+			$( "#wiki" ).load(wikiurl+"page.php?a=s&p=" + pagename);
 		}
 	});
 
@@ -53,9 +53,9 @@ $(function() {
 		}
 		pagename = $("#newpage-name").val()+".md";
 		var content = "* [Wiki home](main)\n\n---\n##" + $("#newpage-name").val();
-		$.get(wikiurl+"update.php",{name:pagename,content:content}, function(){
+		$.get(wikiurl+"page.php",{a:"u",p:pagename,content:content}, function(){
 			$( "#wiki" ).empty();
-			$( "#wiki" ).load(wikiurl+"page.php?p=" + pagename);
+			$( "#wiki" ).load(wikiurl+"page.php?a=s&p=" + pagename);
 			$('#wiki-createform').hide();
 			$('#wiki-createform')[0].reset();
 		});
@@ -75,9 +75,9 @@ $(function() {
 	$( "#wiki-editform" ).submit(function( e ) {
 		e.preventDefault();
 		var content = $("#wikipage-text").val();
-		$.get(wikiurl+"update.php",{name:pagename,content:content}, function(){
+		$.get(wikiurl+"page.php",{a:"u",p:pagename,content:content}, function(){
 			$( "#wiki" ).empty();
-			$( "#wiki" ).load(wikiurl+"page.php?p=" + pagename);
+			$( "#wiki" ).load(wikiurl+"page.php?a=s&p=" + pagename);
 			$('#wiki-editform').hide();
 			$('#wiki-editform')[0].reset();
 		});		
@@ -86,10 +86,10 @@ $(function() {
 	// remove this page
 	$("#remove-page").on("click", function(e){
 		e.preventDefault();
-		$.get(wikiurl+"remove.php",{name:pagename}, function(){
+		$.get(wikiurl+"page.php",{a:"r",p:pagename}, function(){
 			$( "#wiki" ).empty();
 			pagename = "main.md";
-			$( "#wiki" ).load(wikiurl+"page.php?p=" + pagename);
+			$( "#wiki" ).load(wikiurl+"page.php?a=s&p=" + pagename);
 		});
 		return false;
 	});
@@ -97,10 +97,10 @@ $(function() {
 	// list all pages
 	$("#list-pages").on("click", function(e){
 		e.preventDefault();
-		$.get(wikiurl+"list.php", function(){
+		$.get(wikiurl+"page.php?a=l", function(){
 			$( "#wiki" ).empty();
 			pagename = "list.md";
-			$( "#wiki" ).load(wikiurl+"page.php?p=" + pagename);
+			$( "#wiki" ).load(wikiurl+"page.php?a=s&p=" + pagename);
 		});
 		return false;
 	});
