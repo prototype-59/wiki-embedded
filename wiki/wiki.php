@@ -5,24 +5,20 @@
  * @author Aleksandar Radovanovic <aleksandar@radovanovic.com>
  * @version 2017-05-03
 */
+if (session_status() == PHP_SESSION_NONE) { session_start(); }
+$_SESSION['wiki-editable'] = $wikisettings["editable"];
 ?>
 <script>
 $(function() {
-
-/*  wiki settings
-============================================================================ */
-
-	var wikiurl = "wiki/"; 	// <- set the relative path to wiki
+	// set the relative path to wiki and default page name
+	var wikiurl = "<?php print $wikisettings["path"] ?>"; 	
 	var pagename = "main.md";	// <- set start page
 
-/*  dont change bellow this point
-===============================================================================
-*/
 	$( "#wiki" ).load(wikiurl+"page.php?a=s&p=" + pagename);
 	
 	// make pages editable id data-editable is set to true
 	if ($("#wiki").data("editable")===true) {
-		$("#edit-section").show();
+		$("#wiki-edit-menu").show();
 	}
 
 	// attach click on links inside wikipage
@@ -47,13 +43,13 @@ $(function() {
 	});
 	$( "#wiki-createform" ).submit(function( event ) {
 		event.preventDefault();
-		var regex = new RegExp("^[a-zA-Z0-9]+$");
+		var regex = new RegExp("^[a-zA-Z0-9\-\]+$");
 		if (!regex.test($("#newpage-name").val())) {
 			alert("Please use alphanumeric names only!");
+			return false;
 		}
 		pagename = $("#newpage-name").val()+".md";
-		var content = "* [Wiki home](main)\n\n---\n##" + $("#newpage-name").val();
-		$.get(wikiurl+"page.php",{a:"u",p:pagename,content:content}, function(){
+		$.get(wikiurl+"page.php",{a:"c",p:pagename}, function(){
 			$( "#wiki" ).empty();
 			$( "#wiki" ).load(wikiurl+"page.php?a=s&p=" + pagename);
 			$('#wiki-createform').hide();
@@ -107,27 +103,25 @@ $(function() {
 
 });
 </script>
-
-<div id="edit-section" style="display:none;border-bottom:1px solid black;margin-bottom:10px;">
+<div id="wiki-edit-menu" style="display:none;">
 	<label id="edit-page">Edit page</label>&nbsp;|&nbsp;
 	<label id="create-page">Create a new page</label>&nbsp;|&nbsp;
 	<label id="list-pages">List all pages</label>&nbsp;|&nbsp;
 	<label id="remove-page">Remove this page</label>
 </div>
 
-<div id="edit-section" style="display:none;border-bottom:1px solid black;margin-bottom:10px;">
-	<label id="edit-page">Edit page</label>&nbsp;|&nbsp;
-	<label id="create-page">Create a new page</label>
-</div>
-
-<form name="wiki-createform" id="wiki-createform" method="get" style="display:none;border-bottom:1px solid black;padding-bottom:10px;">
+<div id="wiki-forms">
+<form name="wiki-createform" id="wiki-createform" method="get" style="display:none;">
 	<input type="text" name="newpage-name" id="newpage-name" value="" placeholder="new page name">
 	<input type="submit"  value="Submit" />
 	<input type="reset" value="Cancel" onclick="$('#wiki-createform').hide();"/>
 </form>
 
-<form name="wiki-editform" id="wiki-editform" method="get" style="display:none;border-bottom:1px solid black;padding-bottom:10px;">
+<form name="wiki-editform" id="wiki-editform" method="get" style="display:none;">
 	<textarea id="wikipage-text" rows="25" style="width:100%"></textarea>
 	<input type="submit" value="Submit" />
 	<input type="reset" value="Cancel" onclick="$('#wiki-editform').hide();"/>
 </form>
+</div>
+
+<div id="wiki" data-editable="<?php print $wikisettings["editable"]; ?>"></div>

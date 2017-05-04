@@ -11,16 +11,28 @@
 
 /*
 input:
-    a: action -> s(how), u(pdate), l(ist), r(emove)
+    a: action -> c(reate), l(ist), s(how), r(emove), u(pdate)
     p: page name
     content: new page content / optional for update and new page
 */
+
+// security check is performed via session
+if (session_status() == PHP_SESSION_NONE) { session_start(); }
+$editable = $_SESSION['wiki-editable'];
 
 include_once  "Parsedown.php";
 $input = &$_GET;
 
 switch ($input["a"])
 {
+    case "c":   // create page
+        if ( !$editable ) { break; }
+        $file = "pages/" . $input["p"];
+        if ( !file_exists( $file ) ) {
+            file_put_contents( $file, "* [Wiki home](main)\n\n---\n##" . pathinfo( $file, PATHINFO_FILENAME) );
+        }
+        break;
+
     case "l":   // create pages list
         $files = scandir( "pages/" );
         $content = "##Wiki pages:\n\n";
@@ -36,16 +48,23 @@ switch ($input["a"])
         break;
 
     case "r":   // remove page 
+        if ( !$editable ) { break; }
         unlink( "pages/" . $input["p"] );
         break;
 
-    case "s":   // show page 
-        $page = file_get_contents("pages/" . $input["p"]);
+    case "s":   // show page
+        $file = "pages/" . $input["p"];
+        if ( !file_exists( $file ) ) {
+            print "Page does not exists! Create one.";
+            break;
+        }
+        $page = file_get_contents( $file );
         $Parsedown = new Parsedown();
         print $Parsedown->text( $page );
         break;
 
-    case "u":   // update/create page 
+    case "u":   // update page
+        if ( !$editable ) { break; }
         $page = "pages/" . $input["p"];
         $content = $input["content"];
         file_put_contents( $page, $content );

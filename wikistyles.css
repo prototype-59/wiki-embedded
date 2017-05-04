@@ -1,0 +1,33 @@
+/* optional wiki styles
+---------------------------------------------------------------------------- */
+#wiki {
+    margin:10px;
+}
+
+/* you can specify other html elements as well */
+#wiki p { 
+    text-align:justify; 
+}
+
+#wiki-edit-menu {
+    border-bottom:1px solid black;margin-bottom:10px;
+}
+#wiki-edit-menu label {
+    color: blue;
+}
+
+#wiki-forms {
+    border-bottom:1px solid black;padding-bottom:10px;
+}
+
+#wiki-forms input[type=submit] {
+    color:red;
+}
+
+#wiki-forms input[type=input] {
+    border-radius: 6px;
+}
+
+#wiki-forms textarea {
+    background-color:lightgoldenrodyellow;
+}

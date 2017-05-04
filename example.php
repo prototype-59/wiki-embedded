@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href='wikistyles.css' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
-
 <!-- some page content .. -->
-
-<?php include_once "wiki/wiki.php" ?>
-<div id="wiki" data-editable="true"></div>
-
+<div>
+<?php 
+$wikisettings = array("path"=>"wiki/", "editable"=>"true");
+include_once $wikisettings["path"] . "wiki.php" 
+?>
+</div>
 <!-- more page content ... -->
 
 </body>
