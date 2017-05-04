@@ -11,49 +11,86 @@
 
 /*
 input:
-    a: action -> c(reate), l(ist), s(how), r(emove), u(pdate)
+    db: database folder
+    a: action ->  c(reate), f(ind), l(ist), o(get original) s(how), r(emove), u(pdate)
     p: page name
     content: new page content / optional for update and new page
 */
 
 // security check is performed via session
 if (session_status() == PHP_SESSION_NONE) { session_start(); }
-$editable = $_SESSION['wiki-editable'];
+$editable = isset($_SESSION["wiki-editable"]) ? $_SESSION["wiki-editable"] : false;
 
 include_once  "Parsedown.php";
-$input = &$_GET;
+$input = &$_POST;
 
 switch ($input["a"])
 {
     case "c":   // create page
         if ( !$editable ) { break; }
-        $file = "pages/" . $input["p"];
+        $file = $input["db"] . $input["p"];
         if ( !file_exists( $file ) ) {
             file_put_contents( $file, "* [Wiki home](main)\n\n---\n##" . pathinfo( $file, PATHINFO_FILENAME) );
         }
         break;
 
+    case "f":   // find
+        $search = $input["search"];
+        if ( strlen( $search ) <= 2 ) { break; }
+        $result = "##Search result:\n\n";
+        $Parsedown = new Parsedown();
+        
+        foreach (glob($input["db"] ."*.md") as $filename) 
+        {
+            $lines = file($filename);
+            $found = "";
+            foreach($lines as $line)
+            {
+                if(strpos($line, $search) !== false)
+                {
+                    $found .= "  * " . $line . "\n";
+                }
+            }
+            if ( strlen( $found ) > 0 ) {
+                $result .= "* [" . pathinfo($filename, PATHINFO_FILENAME) . "](" .pathinfo($filename, PATHINFO_FILENAME) . ") page:\n\n" . $found ."\n";
+            }
+        }
+        $result .= "\n* [wiki home](main)";
+        $Parsedown = new Parsedown();
+        print $Parsedown->text( $result );
+        break;
+
     case "l":   // create pages list
-        $files = scandir( "pages/" );
-        $content = "##Wiki pages:\n\n";
+        $files = scandir( $input["db"] );
+        $list = " ##Wiki pages:\n\n";
         foreach ($files as $idx => $file)
         {
 	        $filename = pathinfo($file, PATHINFO_FILENAME);
-	        if ($filename != "" && $filename != "." && $filename != "list") 
+	        if ($filename != "" && $filename != ".") 
 	        {
-		        $content .= "* [$filename]($filename)\n";
+		        $list .= "* [$filename]($filename)\n";
 	        }
         }
-        file_put_contents( "pages/list.md", $content );
+        $Parsedown = new Parsedown();
+        print $Parsedown->text( $list );
+        break;
+    
+    case "o":   // get original - no parsing
+        $file = $input["db"] . $input["p"];
+        if ( !file_exists( $file ) ) {
+            print "error";
+            break;
+        }
+        print file_get_contents( $file );
         break;
 
     case "r":   // remove page 
         if ( !$editable ) { break; }
-        unlink( "pages/" . $input["p"] );
+        unlink( $input["db"] . $input["p"] );
         break;
 
     case "s":   // show page
-        $file = "pages/" . $input["p"];
+        $file = $input["db"] . $input["p"];
         if ( !file_exists( $file ) ) {
             print "Page does not exists! Create one.";
             break;
@@ -65,9 +102,13 @@ switch ($input["a"])
 
     case "u":   // update page
         if ( !$editable ) { break; }
-        $page = "pages/" . $input["p"];
+        $file = $input["db"] . $input["p"];
+        if ( !file_exists( $file ) ) {
+            print "Page does not exists!";
+            break;
+        }
         $content = $input["content"];
-        file_put_contents( $page, $content );
+        file_put_contents( $file, $content );
         break;
 
     default:

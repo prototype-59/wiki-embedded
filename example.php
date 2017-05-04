@@ -8,7 +8,7 @@
 <!-- some page content .. -->
 <div>
 <?php 
-$wikisettings = array("path"=>"wiki/", "editable"=>"true");
+$wikisettings = array("path"=>"wiki/", "wdb"=>"pages", "editable"=>"true");
 include_once $wikisettings["path"] . "wiki.php" 
 ?>
 </div>
