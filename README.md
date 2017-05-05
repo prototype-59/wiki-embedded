@@ -21,7 +21,7 @@ Setup
 
 * copy or clone this code
 * enable rw access to pages subdirectory: `chmod  777 -R wiki/pages/` If you wish to have multiple databases create subdirectory for each of them
-* enable rw access to uplods subdirectory: `chmod  777 -R wiki/uplods/`
+* enable rw access to uploads subdirectory: `chmod  777 -R wiki/uploads/`
 * Inside your webpage ( look at the `example.php` ) include:
 ```html
 <script src="jquery.min.js"></script>
