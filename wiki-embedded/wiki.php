@@ -71,6 +71,7 @@ $(function() {
 			$( "#wiki" ).empty();
 			$( "#wiki" ).html(page);
 		});
+		$( "form" ).hide(); $("#wiki-searchform").show();
 		return false;
 	});
 
