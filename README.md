@@ -1,6 +1,6 @@
 ![ wiki](logo.jpg) wiki-embedded
 =======
- No more 1990's wiki look. wiki-embedded is a simple wiki that lives inside your webpage. It is made to seamlessly integrate to your personal or company website. Great for help/support pages or for a knowledgebase.
+ No more 1990's wiki look. wiki-embedded is a simple wiki that lives inside your webpage. It is made to seamlessly integrate to your personal or company website. The same installation supports multiple databases so it is great for help/support pages or for knowledgebases.
 
 Features
 -----
@@ -20,21 +20,22 @@ Setup
 -----
 
 * copy or clone this code
-* enable rw access to pages subdirectory: `chmod  777 -R wiki/pages/` If you wish to have multiple databases create subdirectory for each of them.
+* enable rw access to pages subdirectory: `chmod  777 -R wiki/pages/` If you wish to have multiple databases create subdirectory for each of them
+* enable rw access to uplods subdirectory: `chmod  777 -R wiki/uplods/`
 * Inside your webpage ( look at the `example.php` ) include:
 ```html
 <script src="jquery.min.js"></script>
 ...
 <?php 
-$wikisettings = array("path"=>"wiki/", "wdb"=>"pages", "editable"=>"true");
+$wikisettings = array("path"=>"wiki-embedded/", "wdb"=>"pages", "editable"=>"true");
 include_once $wikisettings["path"] . "wiki.php" 
 ?>
 ```
 $wikisettings variable:
   * path: a relative path to your wiki directory
-  * wdb: wiki database name (subdirectory under wiki direcotry). You can have wiki embedded into various webpages each pointing to a different database (e.g. for customers, staff, admin ...).
+  * wdb: wiki database name (subdirectory under wiki-embedded direcotry). You can embed wiki into various webpages each pointing to a different database (e.g. for customers, staff, admin ...).
   * editable: true/false. Since wiki does not have any users database it is up to your application to controll read/write access by setting this value.
-* wiki inherits your page stylesheet, but you can also define additional one as shown in `wikistyles.css`
+* wiki-embedded inherits your page stylesheet, but you can also define additional one as shown in `wikistyles.css`
 
 License
 -----
