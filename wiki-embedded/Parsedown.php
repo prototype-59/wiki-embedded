@@ -21,6 +21,11 @@ class Parsedown
 
     # ~
 
+    /* not used by wiki-embedeed for now
+    function __construct($init_parameter) {
+        $this->pages_path = $init_parameter;
+    }
+    */
     function text($text)
     {
         # make sure no definitions are set
@@ -1184,7 +1189,8 @@ class Parsedown
         $Inline['element']['attributes'] += $Link['element']['attributes'];
 
         unset($Inline['element']['attributes']['href']);
-
+        // wiki-embedded update: get images from uploads/ directory which is bellow the current one
+        $Inline['element']['attributes']['src'] = basename( getcwd() ) . "/uploads/" . $Inline['element']['attributes']['src'];
         return $Inline;
     }
 

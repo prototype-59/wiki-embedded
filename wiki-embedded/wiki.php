@@ -38,22 +38,22 @@ $(function() {
 	// create a new page
 	$("#create-page").on("click", function(e){
 		e.preventDefault();
-		$("#wiki-editform").hide();
+		$( "form" ).hide(); $("#wiki-searchform").show();
 		$("#wiki-createform").show();
 		return false;
 	});
 	$( "#wiki-createform" ).submit(function( event ) {
 		event.preventDefault();
-		var regex = new RegExp("^[a-zA-Z0-9\-\]+$");
+		var regex = new RegExp("^[a-zA-Z0-9\-\_\]+$");
 		if (!regex.test($("#newpage-name").val())) {
-			alert("Please use alphanumeric names only!");
+			alert("Please use alphanumeric names including '-' & '_' only!");
 			return false;
 		}
 		pagename = $("#newpage-name").val()+".md";
 		$.post(wikiurl,{a:"c",db:wdb, p:pagename}, function(){
 			$( "#wiki" ).empty();
 			$( "#wiki" ).load(wikiurl, {a:"s",db:wdb,p:pagename});
-			$('#wiki-createform').hide();
+			$( "form" ).hide(); $("#wiki-searchform").show();
 			$('#wiki-createform')[0].reset();
 		});
 		return false;
@@ -77,7 +77,7 @@ $(function() {
 	// edit existing
 	$("#edit-page").on("click", function(e){
 		e.preventDefault();
-		$("#wiki-createform").hide();
+		$( "form" ).hide(); $("#wiki-searchform").show();
 		$.post({url:wikiurl, cache:false, data:{a:"o",db:wdb,p:pagename}}, function(page){
 			if (page != "error") {
 				$("#wikipage-text").val(page);
@@ -92,17 +92,15 @@ $(function() {
 		$.post(wikiurl,{a:"u",db:wdb,p:pagename,content:content}, function(){
 			$( "#wiki" ).empty();
 			$( "#wiki" ).load(wikiurl,{a:"s",db:wdb,p:pagename});
-			$('#wiki-editform').hide();
 			$('#wiki-editform')[0].reset();
-			$("#wiki-createform").hide();
+			$( "form" ).hide(); $("#wiki-searchform").show();
 		});		
 		return false;
 	});
 	// remove this page
 	$("#remove-page").on("click", function(e){
 		e.preventDefault();
-		$('#wiki-editform').hide();
-		$('#wiki-createform').hide();
+		$( "form" ).hide(); $("#wiki-searchform").show();
 		$.post(wikiurl,{a:"r",db:wdb,p:pagename}, function(){
 			$( "#wiki" ).empty();
 			pagename = "main.md";
@@ -114,22 +112,54 @@ $(function() {
 	// list all pages
 	$("#list-pages").on("click", function(e){
 		e.preventDefault();
-			$('#wiki-editform').hide();
-			$("#wiki-createform").hide();
 		$.post(wikiurl, {a:"l",db:wdb}, function(list){
 			$( "#wiki" ).empty();
 			pagename = "nopage.txt"; // non-existing page in case user clicks on "remove this page"
 			$( "#wiki" ).html(list);
 		});
+		$("form").hide;$("#wiki-searchform").show();
+		return false;
+	});
+
+	// File upload
+	$("#file-upload").on("click", function(e){
+		e.preventDefault();
+		$('#fileinfo').show();
+		return false;
+	});
+	$( "#fileinfo" ).submit(function( e ) {
+		e.preventDefault();
+		var regex = new RegExp("^[a-zA-Z0-9\-\.\_\]+$");
+		if (!regex.test($("#file").val())) {
+			alert("Please use alphanumeric names including '-' & '_' only!");
+			return false;
+		}
+		var fd = new FormData($("#fileinfo")[0]);
+        fd.append("a", "t"); // action: (t)ransfer file
+        $.ajax({
+            url: wikiurl,  
+            type: 'POST',
+            data: fd,
+            cache: false,
+            contentType: false,
+            processData: false,
+        }).done(function(){
+  			//console.log("Success: Files sent!");
+		}).fail(function(){
+  			alert("An error occurred, the files couldn't be sent!");
+		});
+		$( "form" ).hide(); $("#wiki-searchform").show();
 		return false;
 	});
 });
 </script>
 <div id="wiki-edit-menu" style="display:none;">
-	<label id="edit-page">Edit page</label>&nbsp;|&nbsp;
-	<label id="create-page">Create a new page</label>&nbsp;|&nbsp;
-	<label id="list-pages">List all pages</label>&nbsp;|&nbsp;
-	<label id="remove-page">Remove this page</label>
+	<a href="#" id="edit-page">Edit page</a>&nbsp;
+	<a href="#"  id="create-page">Create a new page</a>&nbsp;
+	<a href="#"  id="remove-page">Remove this page</a>
+	<a href="#"  id="file-upload">File upload</a>
+	<a href="#"  id="list-pages">List pages & files</a>&nbsp;
+	
 </div>
 
 <div id="wiki-forms">
@@ -145,6 +175,11 @@ $(function() {
 	<input type="reset" value="Cancel" onclick="$('#wiki-editform').hide();"/>
 </form>
 </div>
+
+<form name="fileinfo" id="fileinfo" method="post" enctype="multipart/form-data" style="display:none;">
+    <input type="file" name="file" id="file" required>
+    <input type="submit" value="File upload">
+</form>
 
 <form name="wiki-searchform" id="wiki-searchform">
 	<input type="text" id="wiki-searchfor">

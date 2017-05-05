@@ -4,11 +4,11 @@
 <link href='wikistyles.css' rel='stylesheet' type='text/css'>
 </head>
 
-<body>
+<body style="margin:25px;">
 <!-- some page content .. -->
 <div>
 <?php 
-$wikisettings = array("path"=>"wiki/", "wdb"=>"pages", "editable"=>"true");
+$wikisettings = array("path"=>"wiki-embedded/", "wdb"=>"pages", "editable"=>"true");
 include_once $wikisettings["path"] . "wiki.php" 
 ?>
 </div>

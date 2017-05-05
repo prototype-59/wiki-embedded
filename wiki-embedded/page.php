@@ -1,6 +1,6 @@
 <?php
 /**
- * manage wiki pages
+ * manage wiki files
 
  * @author Aleksandar Radovanovic <aleksandar@radovanovic.com>
  * @version 2017-05-03
@@ -12,7 +12,7 @@
 /*
 input:
     db: database folder
-    a: action ->  c(reate), f(ind), l(ist), o(get original) s(how), r(emove), u(pdate)
+    a: action ->  c(reate), f(ind), l(ist), o(get original) s(how), r(emove), u(pdate) (t)ransfer file
     p: page name
     content: new page content / optional for update and new page
 */
@@ -23,6 +23,8 @@ $editable = isset($_SESSION["wiki-editable"]) ? $_SESSION["wiki-editable"] : fal
 
 include_once  "Parsedown.php";
 $input = &$_POST;
+
+$Parsedown = new Parsedown();
 
 switch ($input["a"])
 {
@@ -37,8 +39,7 @@ switch ($input["a"])
     case "f":   // find
         $search = $input["search"];
         if ( strlen( $search ) <= 2 ) { break; }
-        $result = "##Search result:\n\n";
-        $Parsedown = new Parsedown();
+        $result = "[wiki home](main)\n##Search result:\n\n";
         
         foreach (glob($input["db"] ."*.md") as $filename) 
         {
@@ -46,35 +47,35 @@ switch ($input["a"])
             $found = "";
             foreach($lines as $line)
             {
-                if(strpos($line, $search) !== false)
+                if(stripos($line, $search) !== false)
                 {
+                    $line = preg_replace("/\p{L}*?".preg_quote($search)."\p{L}*/ui", "<b>$0</b>", $line);
                     $found .= "  * " . $line . "\n";
                 }
             }
             if ( strlen( $found ) > 0 ) {
-                $result .= "* [" . pathinfo($filename, PATHINFO_FILENAME) . "](" .pathinfo($filename, PATHINFO_FILENAME) . ") page:\n\n" . $found ."\n";
+                $result .= "* [" . pathinfo($filename, PATHINFO_FILENAME) . "](" .pathinfo($filename, PATHINFO_FILENAME) . "):\n\n" . $found ."\n";
             }
         }
-        $result .= "\n* [wiki home](main)";
-        $Parsedown = new Parsedown();
         print $Parsedown->text( $result );
         break;
 
     case "l":   // create pages list
-        $files = scandir( $input["db"] );
-        $list = " ##Wiki pages:\n\n";
-        foreach ($files as $idx => $file)
+        $result = "[wiki home](main)\n##Wiki pages:\n\n";
+        foreach (glob($input["db"] ."*.md") as $filename) 
         {
-	        $filename = pathinfo($file, PATHINFO_FILENAME);
-	        if ($filename != "" && $filename != ".") 
-	        {
-		        $list .= "* [$filename]($filename)\n";
-	        }
+            $file = pathinfo($filename, PATHINFO_FILENAME);
+            $result .= "* [$file]($file)\n";
         }
-        $Parsedown = new Parsedown();
-        print $Parsedown->text( $list );
+        $result .= "\n##Files uploaded:\n";
+        foreach (glob("uploads/*") as $filename) 
+        {
+            $file = pathinfo($filename, PATHINFO_BASENAME);
+            $result .= "* $file\n";
+        }
+        print $Parsedown->text( $result );
         break;
-    
+
     case "o":   // get original - no parsing
         $file = $input["db"] . $input["p"];
         if ( !file_exists( $file ) ) {
@@ -96,7 +97,6 @@ switch ($input["a"])
             break;
         }
         $page = file_get_contents( $file );
-        $Parsedown = new Parsedown();
         print $Parsedown->text( $page );
         break;
 
@@ -109,6 +109,10 @@ switch ($input["a"])
         }
         $content = $input["content"];
         file_put_contents( $file, $content );
+        break;
+
+    case "t":   // ftransfer - file ie. upload
+        move_uploaded_file ($_FILES['file'] ['tmp_name'],"uploads/{$_FILES['file'] ['name']}");
         break;
 
     default:

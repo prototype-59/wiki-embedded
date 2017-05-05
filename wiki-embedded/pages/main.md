@@ -1,8 +1,6 @@
-wiki-embedded
+![ wiki](logo.jpg) wiki-embedded
 =======
-
-
-No more 1990's wiki look. wiki-embedded is a simple wiki that lives inside your webpage. It is made to seamlessly integrate to your personal or company website. Great for help/support pages or for a knowledgebase.
+ No more 1990's wiki look. wiki-embedded is a simple wiki that lives inside your webpage. It is made to seamlessly integrate to your personal or company website. Great for help/support pages or for a knowledgebase.
 
 Features
 -----
@@ -42,5 +40,3 @@ License
 -----
 * wiki-embedded is licensed under [MIT](https://github.com/Fabianlindfors/multi.js/blob/master/LICENSE).
 * markdown parsing class by Emanuil Rusev [Parsedown](https://github.com/erusev/parsedown)
-
-
