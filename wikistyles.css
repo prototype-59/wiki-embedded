@@ -10,7 +10,7 @@
 }
 
 #wiki-edit-menu {
-    margin:20px;
+    margin-top:20px;
 }
 
 #wiki-forms {
@@ -33,4 +33,28 @@
 }
 #wiki-searchform input, input[type=submit] {
     padding:4px;
+}
+
+/* tables formatting
+------------------------------------------------------------ */
+#wiki table{
+	border-collapse: collapse;
+	empty-cells: show;
+	border-spacing: 10px;
+	border: 1px solid #ccc;
+	background: white;
+	color:black;
+	win-width:50%;
+}
+#wiki table th {
+	background-color: #D3D3D3;
+}
+#wiki table tr:nth-child(even) {
+    background-color: #F8F8F8;
+}
+#wiki table td, th {
+	padding: 7px;
+}
+#wiki table tr:hover td {
+	background-color: #F0F0F0;
 }
