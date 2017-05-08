@@ -49,9 +49,11 @@ switch ($input["a"])
             foreach($lines as $line)
             {
                 if(stripos($line, $search) !== false)
-                {
-                    $line = preg_replace("/\p{L}*?".preg_quote($search)."\p{L}*/ui", "<b>$0</b>", $line);
-                    $found .= "  * " . $line . "\n";
+                {	// make found text bold and replace some markdown tags
+						$line = preg_replace("/\p{L}*?".preg_quote($search)."\p{L}*/ui", "<b>$0</b>", $line);
+						$patterns = array('/#/', '/\[(.*?)\][\[\(].*?[\]\)]/', '/\|/', '/\*/');
+						$line = preg_replace($patterns, "$1", $line);
+						$found .= "  * " . $line . "\n";
                 }
             }
             if ( strlen( $found ) > 0 ) {
