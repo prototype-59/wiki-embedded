@@ -3,7 +3,7 @@
  * wiki-embedded 
 
  * @author Aleksandar Radovanovic <aleksandar@radovanovic.com>
- * @version 2017-05-03
+ * @version 2017-05-08
 */
 if (session_status() == PHP_SESSION_NONE) { session_start(); }
 $_SESSION['wiki-editable'] = $wikisettings["editable"];
@@ -13,10 +13,8 @@ $(function() {
 	// set the relative path to wiki, database name(subdirectory) and default page name
 	var wikiurl = "<?php print $wikisettings["path"] . "page.php" ?>"; 
 	var wdb	= "<?php print $wikisettings["wdb"] . "/" ?>";
-	var pagename = "main.md";	// <- set start page
-
-	$( "#wiki" ).load(wikiurl, {a:"s",db:wdb,p:pagename});
-	
+	var pagename = "main";	// <- set start page
+	$( "#wiki" ).load(wikiurl, {a:"s",db:wdb,p:pagename},function(){ $( "#wiki" ).toc(); });
 	// make pages editable id data-editable is set to true
 	if ($("#wiki").data("editable")===true) {
 		$("#wiki-edit-menu").show();
@@ -25,13 +23,19 @@ $(function() {
 	// attach click on links inside wikipage
 	$("#wiki").on("click", "a", function(event) {
 		event.preventDefault();	
-		$( "#wiki" ).empty();
-		pagename = $(this).attr("href");
-		if (pagename.indexOf("http://") >= 0 || pagename.indexOf("https://") >= 0) {
-			window.location.href = pagename;
+		var link = $(this).attr("href");
+		if (link.indexOf("http://") >= 0 || link.indexOf("https://") >= 0) {
+			$( "#wiki" ).empty();
+			window.location.href = link;
 		} else {
-			pagename += ".md";
-			$( "#wiki" ).load(wikiurl, {a:"s",db:wdb,p:pagename});
+			if( link.charAt(0) === "#" ) {
+				//location.href = link; // no smooth scrolling
+				$('html,body').animate({scrollTop:$(link).offset().top}, 500); // smooth scrolling
+			} else {
+				pagename = link;
+				$( "#wiki" ).empty();
+				$( "#wiki" ).load(wikiurl, {a:"s",db:wdb,p:pagename},function(){ $( "#wiki" ).toc(); });
+			}
 		}
 	});
 
@@ -49,10 +53,10 @@ $(function() {
 			alert("Please use alphanumeric names including '-' & '_' only!");
 			return false;
 		}
-		pagename = $("#newpage-name").val()+".md";
+		pagename = $("#newpage-name").val();
 		$.post(wikiurl,{a:"c",db:wdb, p:pagename}, function(){
 			$( "#wiki" ).empty();
-			$( "#wiki" ).load(wikiurl, {a:"s",db:wdb,p:pagename});
+			$( "#wiki" ).load(wikiurl, {a:"s",db:wdb,p:pagename},function(){ $( "#wiki" ).toc(); });
 			$( "form" ).hide(); $("#wiki-searchform").show();
 			$('#wiki-createform')[0].reset();
 		});
@@ -92,7 +96,7 @@ $(function() {
 		var content = $("#wikipage-text").val();
 		$.post(wikiurl,{a:"u",db:wdb,p:pagename,content:content}, function(){
 			$( "#wiki" ).empty();
-			$( "#wiki" ).load(wikiurl,{a:"s",db:wdb,p:pagename});
+			$( "#wiki" ).load(wikiurl, {a:"s",db:wdb,p:pagename},function(){ $( "#wiki" ).toc(); });
 			$('#wiki-editform')[0].reset();
 			$( "form" ).hide(); $("#wiki-searchform").show();
 		});		
@@ -104,8 +108,8 @@ $(function() {
 		$( "form" ).hide(); $("#wiki-searchform").show();
 		$.post(wikiurl,{a:"r",db:wdb,p:pagename}, function(){
 			$( "#wiki" ).empty();
-			pagename = "main.md";
-			$( "#wiki" ).load(wikiurl, {a:"s",db:wdb,p:pagename});
+			pagename = "main";
+			$( "#wiki" ).load(wikiurl, {a:"s",db:wdb,p:pagename},function(){ $( "#wiki" ).toc(); });
 		});
 		return false;
 	});
@@ -131,8 +135,10 @@ $(function() {
 	$( "#fileinfo" ).submit(function( e ) {
 		e.preventDefault();
 		var regex = new RegExp("^[a-zA-Z0-9\-\.\_\]+$");
-		if (!regex.test($("#file").val())) {
-			alert("Please use alphanumeric names including '-' & '_' only!");
+		// unix/windows style various browsers path process
+		var filename= $("#file").val().split('/').pop(); filename= filename.split('\\').pop();
+		if (!regex.test(filename)) {
+			alert(filename+": Please use alphanumeric names including '-' & '_' only!");
 			return false;
 		}
 		var fd = new FormData($("#fileinfo")[0]);
@@ -153,6 +159,33 @@ $(function() {
 		return false;
 	});
 });
+// generate the table of content
+(function( $ ) {
+	$.fn.toc = function() {   
+	if( !$("#toc").length )  return; // no toc request   
+	$("#toc").empty();
+	$( '<ol id="tocList"></ol>' ).appendTo( "#toc" );                                                  
+	var H2Item = null;                                                             
+	var H2List = null;                                                             
+    
+	var index = 0;                                                                     
+	$("h2, h3").each(function() {                                                      
+		var anchor = "<div id='" + index + "'></div>";  
+		$(this).before(anchor);                                                        
+		var li = '<li><a href="#' + index + '">' +  $(this).text() + '</a></li>';
+    	if( $(this).is("h2") ){                                                        
+			H2List = $("<ol></ol>");                                               
+			H2Item = $(li);                                                        
+			H2Item.append(H2List);                                             
+			H2Item.appendTo(tocList);                                              
+		} else {                                                                       
+			H2List.append(li);                                                     
+		}                                                                              
+		index++;                                                                       
+	});
+	$( "<h2>Contents</h2>" ).prependTo( $( "#toc" ) );
+} 
+}( jQuery ));
 </script>
 <div id="wiki-edit-menu" style="display:none;">
 	<a href="#" id="edit-page">Edit page</a>&nbsp;

@@ -1,6 +1,8 @@
 ![ wiki](logo.jpg) wiki-embedded
 =======
- No more 1990's wiki look. wiki-embedded is a simple wiki that lives inside your webpage. It is made to seamlessly integrate to your personal or company website. Great for help/support pages or for a knowledgebase.
+No more 1990's wiki look. wiki-embedded is a simple wiki that lives inside your webpage. It is made to seamlessly integrate to your personal or company website. Great for help/support pages or for a knowledgebase.
+
+<div id="toc"></div>             
 
 Features
 -----
@@ -35,6 +37,58 @@ $wikisettings variable:
   * wdb: wiki database name (subdirectory under wiki direcotry). You can have wiki embedded into various webpages each pointing to a different database (e.g. for customers, staff, admin ...).
   * editable: true/false. Since wiki does not have any users database it is up to your application to controll read/write access by setting this value.
 * wiki inherits your page stylesheet, but you can also define additional one as shown in `wikistyles.css`
+
+Markdown cheatsheet
+-----
+```
+# H1
+## H2
+### H3
+#### H4
+##### H5
+###### H6
+---------------------------------------
+*italics* or _italics_
+**bold** or __bold__
+_combined **bold** italic_
+~~Strikethrough~~
+---------------------------------------
+* Unordered list 
+ * Unordered sub-list
+- Unordered list
++ Unordered list
+
+1. Ordered list
+2. Ordered list item
+ 1. Ordered list sub item
+2. Ordered list item
+---------------------------------------
+> Blockquote
+<hr> --- or *** or ___
+---------------------------------------
+![my image](logo.jpg)
+---------------------------------------
+http://www.google.com or <http://www.google.com> 
+[Google](http://www.google.com)
+[link with title](https://www.google.com "Google")
+[relative link to a webpage](../pages/LICENSE)
+---------------------------------------
+code starts with 4 spaces or fenced by lines with 3 back-ticks 
+---------------------------------------
+| Table header 1 | Table header 2 | Table header 3 |
+| --- | :---: | ---: |
+| left | centered  | right | 
+---------------------------------------
+
+Autogenerate table of contents: <div id="toc"></div> 
+Content is generated from h2,h3 (must have at least 1 h2 on the page before the first h3)
+
+---------------------------------------
+[boomark](#bookmark)
+...
+<div id="bookmark">bookmark</div>
+
+```
 
 License
 -----

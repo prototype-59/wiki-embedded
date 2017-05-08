@@ -3,7 +3,7 @@
  * manage wiki files
 
  * @author Aleksandar Radovanovic <aleksandar@radovanovic.com>
- * @version 2017-05-03
+ * @version 2017-05-08
 
  * markdown: https://en.wikipedia.org/wiki/Markdown
  * parser: https://github.com/erusev/parsedown
@@ -25,12 +25,13 @@ include_once  "Parsedown.php";
 $input = &$_POST;
 
 $Parsedown = new Parsedown();
+$pagefile = array_key_exists("p", $input) ?  $input["p"] . ".md" : ""; //some options does not requre pagefile
 
 switch ($input["a"])
 {
     case "c":   // create page
         if ( !$editable ) { break; }
-        $file = $input["db"] . $input["p"];
+        $file = $input["db"] . $pagefile;
         if ( !file_exists( $file ) ) {
             file_put_contents( $file, "* [Wiki home](main)\n\n---\n##" . pathinfo( $file, PATHINFO_FILENAME) );
         }
@@ -77,7 +78,7 @@ switch ($input["a"])
         break;
 
     case "o":   // get original - no parsing
-        $file = $input["db"] . $input["p"];
+        $file = $input["db"] . $pagefile;
         if ( !file_exists( $file ) ) {
             print "error";
             break;
@@ -87,11 +88,11 @@ switch ($input["a"])
 
     case "r":   // remove page 
         if ( !$editable ) { break; }
-        unlink( $input["db"] . $input["p"] );
+        unlink( $input["db"] .$pagefile );
         break;
 
     case "s":   // show page
-        $file = $input["db"] . $input["p"];
+        $file = $input["db"] . $pagefile;
         if ( !file_exists( $file ) ) {
             print "Page does not exists! Create one.";
             break;
@@ -102,7 +103,7 @@ switch ($input["a"])
 
     case "u":   // update page
         if ( !$editable ) { break; }
-        $file = $input["db"] . $input["p"];
+        $file = $input["db"] . $pagefile;
         if ( !file_exists( $file ) ) {
             print "Page does not exists!";
             break;

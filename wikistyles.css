@@ -58,3 +58,11 @@
 #wiki table tr:hover td {
 	background-color: #F0F0F0;
 }
+
+/* TOC
+------------------------------------------------------------ */
+#wiki #toc {
+    padding:1em;
+    display: inline-block;
+    border:1px solid black;
+}
