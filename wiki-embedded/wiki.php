@@ -16,7 +16,7 @@ $(function() {
 	var pagename = "main";	// <- set start page
 	$( "#wiki" ).load(wikiurl, {a:"s",db:wdb,p:pagename},function(){ $( "#wiki" ).toc(); });
 	// make pages editable id data-editable is set to true
-	if ($("#wiki").data("editable")===true) {
+	if ($("#wiki").data("editable") == 1) {
 		$("#wiki-edit-menu").show();
 	}
 

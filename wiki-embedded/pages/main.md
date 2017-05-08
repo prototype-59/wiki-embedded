@@ -28,14 +28,14 @@ Setup
 <script src="jquery.min.js"></script>
 ...
 <?php 
-$wikisettings = array("path"=>"wiki/", "wdb"=>"pages", "editable"=>"true");
+$wikisettings = array("path"=>"wiki/", "wdb"=>"pages", "editable"=>1);
 include_once $wikisettings["path"] . "wiki.php" 
 ?>
 ```
 $wikisettings variable:
-  * path: a relative path to your wiki directory
+  * path: a relative path to your wiki directory ending with '/'
   * wdb: wiki database name (subdirectory under wiki direcotry). You can have wiki embedded into various webpages each pointing to a different database (e.g. for customers, staff, admin ...).
-  * editable: true/false. Since wiki does not have any users database it is up to your application to controll read/write access by setting this value.
+  * editable: 1 or 0. Since wiki does not have any users database it is up to your application to controll read/write access by setting this value.
 * wiki inherits your page stylesheet, but you can also define additional one as shown in `wikistyles.css`
 
 Markdown cheatsheet
