@@ -18,12 +18,12 @@ class Parsedown
     # ~
 
     const version = '1.6.0';
+    protected $pages_dir;
 
     # ~
-
-    /* not used by wiki-embedeed for now
-    function __construct($init_parameter) {
-        $this->pages_path = $init_parameter;
+    /* not used for now
+    function __construct($pd) {
+        $this->pages_dir = $pd;
     }
     */
     function text($text)
@@ -1190,7 +1190,8 @@ class Parsedown
 
         unset($Inline['element']['attributes']['href']);
         // wiki-embedded update: get images from uploads/ directory which is bellow the current one
-        $Inline['element']['attributes']['src'] = basename( getcwd() ) . "/uploads/" . $Inline['element']['attributes']['src'];
+        $upload_dir = pathinfo($_SERVER['PHP_SELF'],PATHINFO_DIRNAME) . "/uploads/";
+        $Inline['element']['attributes']['src'] = $upload_dir . $Inline['element']['attributes']['src'];
         return $Inline;
     }
 
