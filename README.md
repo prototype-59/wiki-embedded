@@ -64,7 +64,11 @@ _combined **bold** italic_
 > Blockquote
 <hr> --- or *** or ___
 ---------------------------------------
-![my image](logo.jpg)
+![my image](image.jpg)
+![image](image.jpg)
+![image alt >](/image-right.jpg)
+![image alt <](/image-left.jpg)
+![image alt <>](/center-image.jpg)
 ---------------------------------------
 http://www.google.com or <http://www.google.com> 
 [Google](http://www.google.com)

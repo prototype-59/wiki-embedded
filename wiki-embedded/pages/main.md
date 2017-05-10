@@ -1,4 +1,4 @@
-![ wiki](logo.jpg) wiki-embedded
+![wiki](logo.jpg) wiki-embedded 
 =======
 No more 1990's wiki look. wiki-embedded is a simple wiki that lives inside your webpage. It is made to seamlessly integrate to your personal or company website. Great for help/support pages or for a knowledgebase.
 
@@ -66,7 +66,10 @@ _combined **bold** italic_
 > Blockquote
 <hr> --- or *** or ___
 ---------------------------------------
-![my image](logo.jpg)
+![image](image.jpg)
+![image alt >](/image-right.jpg)
+![image alt <](/image-left.jpg)
+![image alt <>](/center-image.jpg)
 ---------------------------------------
 http://www.google.com or <http://www.google.com> 
 [Google](http://www.google.com)

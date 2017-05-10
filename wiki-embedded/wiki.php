@@ -15,7 +15,8 @@ $(function() {
 	var wdb	= "<?php print $wikisettings["wdb"] . "/" ?>";
 	var pagename = "main";	// <- set start page
 	$( "#wiki" ).load(wikiurl, {a:"s",db:wdb,p:pagename},function(){ $( "#wiki" ).toc(); });
-	// make pages editable id data-editable is set to true
+	
+	// show edit menu if data-editable is set to 1
 	if ($("#wiki").data("editable") == 1) {
 		$("#wiki-edit-menu").show();
 	}

@@ -66,3 +66,19 @@
     display: inline-block;
     border:1px solid black;
 }
+
+#wiki img[alt$=">"] {
+  float:right;
+}
+
+#wiki img[alt$="<"] {
+  float:left;
+}
+
+#wiki img[alt$="<>"] {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: auto;
+    float: none!important;
+}
