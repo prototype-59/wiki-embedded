@@ -73,7 +73,7 @@ switch ($input["a"])
         $result .= "\n##Files uploaded:\n";
         foreach (glob("uploads/*") as $filename) 
         {
-            $file = pathinfo($filename, PATHINFO_BASENAME);
+            $file = "[```" . basename($filename) . "```](" . basename($filename) . ")";
             $result .= "* $file\n";
         }
         print $Parsedown->text( $result );
@@ -96,7 +96,7 @@ switch ($input["a"])
     case "s":   // show page
         $file = $input["db"] . $pagefile;
         if ( !file_exists( $file ) ) {
-            print "Page does not exists! Create one.";
+            print $Parsedown->text("Page does not exists! Create one.\n\n[wiki home](main)");
             break;
         }
         $page = file_get_contents( $file );

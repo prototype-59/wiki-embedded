@@ -11,10 +11,12 @@ $_SESSION['wiki-editable'] = $wikisettings["editable"];
 <script>
 $(function() {
 	// set the relative path to wiki, database name(subdirectory) and default page name
-	var wikiurl = "<?php print $wikisettings["path"] . "page.php" ?>"; 
+	var wikiroot = "<?php print $wikisettings["path"]?>";
+	var wikiurl = wikiroot + "page.php"; 
 	var wdb	= "<?php print $wikisettings["wdb"] . "/" ?>";
 	var pagename = "main";	// <- set start page
 	$( "#wiki" ).load(wikiurl, {a:"s",db:wdb,p:pagename},function(){ $( "#wiki" ).toc(); });
+	var regex = new RegExp();
 	
 	// show edit menu if data-editable is set to 1
 	if ($("#wiki").data("editable") == 1) {
@@ -25,19 +27,28 @@ $(function() {
 	$("#wiki").on("click", "a", function(event) {
 		event.preventDefault();	
 		var link = $(this).attr("href");
-		if (link.indexOf("http://") >= 0 || link.indexOf("https://") >= 0) {
+		regex = RegExp(/http(s?):/i);
+		if (regex.test(link))  {
 			$( "#wiki" ).empty();
 			window.location.href = link;
-		} else {
-			if( link.charAt(0) === "#" ) {
-				//location.href = link; // no smooth scrolling
-				$('html,body').animate({scrollTop:$(link).offset().top}, 500); // smooth scrolling
-			} else {
-				pagename = link;
-				$( "#wiki" ).empty();
-				$( "#wiki" ).load(wikiurl, {a:"s",db:wdb,p:pagename},function(){ $( "#wiki" ).toc(); });
-			}
+			return;
+		} 
+		// anchor link
+		if( link.charAt(0) === "#" ) {
+			//location.href = link; // no smooth scrolling
+			$('html,body').animate({scrollTop:$(link).offset().top}, 500); // smooth scrolling
+			return;
 		}
+		// link to files
+		regex = RegExp(/\.(avi|doc|docx|jpg|mkv|mov|mp3|mp4|pdf|png|ppt|pptx|rar|rtf|svg|tex|txt|zip)$/i);
+		if (regex.test(link))  {
+			window.location.href = wikiroot+"uploads/"+link;
+			return;
+		} 
+		// another wiki page link
+		pagename = link;
+		$( "#wiki" ).empty();
+		$( "#wiki" ).load(wikiurl, {a:"s",db:wdb,p:pagename},function(){ $( "#wiki" ).toc(); });
 	});
 
 	// create a new page
@@ -49,7 +60,7 @@ $(function() {
 	});
 	$( "#wiki-createform" ).submit(function( event ) {
 		event.preventDefault();
-		var regex = new RegExp("^[a-zA-Z0-9\-\_\]+$");
+		regex = RegExp("^[a-zA-Z0-9\-\_\]+$");
 		if (!regex.test($("#newpage-name").val())) {
 			alert("Please use alphanumeric names including '-' & '_' only!");
 			return false;

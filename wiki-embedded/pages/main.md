@@ -74,7 +74,7 @@ _combined **bold** italic_
 http://www.google.com or <http://www.google.com> 
 [Google](http://www.google.com)
 [link with title](https://www.google.com "Google")
-[relative link to a webpage](../pages/LICENSE)
+[uploaded doc](doc.pdf)
 ---------------------------------------
 code starts with 4 spaces or fenced by lines with 3 back-ticks 
 ---------------------------------------

@@ -1,7 +1,7 @@
-![ wiki](logo.jpg) wiki-embedded
+![wiki](logo.jpg) wiki-embedded 
 =======
 No more 1990's wiki look. wiki-embedded is a simple wiki that lives inside your webpage. It is made to seamlessly integrate to your personal or company website. Great for help/support pages or for a knowledgebase.
-
+            
 Features
 -----
 
@@ -64,7 +64,6 @@ _combined **bold** italic_
 > Blockquote
 <hr> --- or *** or ___
 ---------------------------------------
-![my image](image.jpg)
 ![image](image.jpg)
 ![image alt >](/image-right.jpg)
 ![image alt <](/image-left.jpg)
@@ -73,7 +72,7 @@ _combined **bold** italic_
 http://www.google.com or <http://www.google.com> 
 [Google](http://www.google.com)
 [link with title](https://www.google.com "Google")
-[relative link to a webpage](../pages/LICENSE)
+[uploaded doc](doc.pdf)
 ---------------------------------------
 code starts with 4 spaces or fenced by lines with 3 back-ticks 
 ---------------------------------------
@@ -82,11 +81,10 @@ code starts with 4 spaces or fenced by lines with 3 back-ticks
 | left | centered  | right | 
 ---------------------------------------
 
-To autogenerate table of contents write: <div id="toc"></div> 
-Content is generated from h2,h3 (must have at least one h2 on the page before the first h3)
+Autogenerate table of contents: <div id="toc"></div> 
+Content is generated from h2,h3 (must have at least 1 h2 on the page before the first h3)
 
 ---------------------------------------
-
 [boomark](#bookmark)
 ...
 <div id="bookmark">bookmark</div>
